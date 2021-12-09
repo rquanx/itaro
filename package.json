@@ -1,6 +1,6 @@
 {
-  "name": "@dream2023/itaro",
-  "version": "0.0.4",
+  "name": "@miles/itaro",
+  "version": "1.0.0",
   "description": "Taro 按需编译解决方案。",
   "main": "index.js",
   "license": "MIT",
