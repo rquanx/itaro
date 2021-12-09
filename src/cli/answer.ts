@@ -3,7 +3,7 @@ const write = require("write")
 import * as fs from "fs"
 import { AppConfig } from "@tarojs/taro"
 import { searchListByName } from "./util"
-import { appConfigCachePath, ITARO_ENV } from "../constants"
+import { answerPagesPath, appConfigCachePath, ITARO_ENV } from "../constants"
 import {
   PageList,
   PageValue,
@@ -109,6 +109,17 @@ export function writeAppConfig(appConfig: AppConfig): void {
   write.sync(appConfigCachePath, JSON.stringify(appConfig, null, 2))
 }
 
+export function writeAnswerPages(pages: PageValue[] | undefined) {
+  write.sync(answerPagesPath, JSON.stringify(pages ?? []))
+}
+
+export function readAnswerPages() {
+  if (fs.existsSync(answerPagesPath)) {
+    return JSON.parse(fs.readFileSync(answerPagesPath, "utf-8"))
+  }
+  return []
+}
+
 // 设置 app.config 的环境变量
 export function setAppConfigEnvFormCache() {
   process.env[ITARO_ENV] = readAppConfigFile()
@@ -124,12 +135,14 @@ export function readAppConfigFile() {
 export interface AnswersResult {
   cache: boolean
   pages?: PageValue[]
+  useCache?: boolean
 }
 export function processAnswers(appConfig: AppConfig, answers: AnswersResult) {
   // 如果使用缓存，则无需做任何处理
   if (!answers.cache) {
     // app.config 处理
     const answerAppConfig = getAnswerAppConfig(appConfig, answers.pages)
+    writeAnswerPages(answers.pages)
     writeAppConfig(answerAppConfig)
   } else {
     setAppConfigEnvFormCache()
