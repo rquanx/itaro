@@ -27,7 +27,7 @@ yarn global add @dream2023/itaro # npm install -g @dream2023/itaro
 ```json
 {
   "dev:weapp": "npm run build:weapp -- --watch",
-  "dev:itaro": "itaro npm run dev:weapp"
+  "dev:itaro": "itaro -s npm run dev:weapp"
 }
 ```
 
@@ -67,7 +67,7 @@ class App extends Component {
 ```json
 {
   "dev:weapp": "npm run build:weapp -- --watch",
-  "dev:itaro": "itaro npm run dev:weapp"
+  "dev:itaro": "itaro -s npm run dev:weapp"
 }
 ```
 
@@ -89,6 +89,52 @@ export default itaro({
 如果你使用了本工具，强烈建议配合小程序开发工具的 [自定义编译模式](https://blog.csdn.net/hongxue8888/article/details/104614445)，一步到自定义页面。
 
 ![itaro](./demo2.png)
+
+
+
+## 选项
+
+
+
+#### 直接使用上次缓存
+
+```bash
+itaro -s npm run dev:weapp -c
+```
+
+
+
+#### 基于上次缓存继续选择
+
+```bash
+itaro -s npm run dev:weapp -r
+```
+
+
+
+#### 设定工作空间
+
+monorepo时使用
+
+```bash
+itaro -s npm run dev:weapp -p ./packages/<package-name>
+```
+
+
+
+#### 不使用缓存
+
+
+
+```bash
+itaro -s npm run dev:weapp -i
+```
+
+
+
+
+
+
 
 ## 特别说明
 
