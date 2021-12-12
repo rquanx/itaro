@@ -10,6 +10,7 @@ import {
   validatePages,
   getPagesSource,
   readAnswerPages,
+  hasAnswerPagesCache,
 } from "./answer"
 import PromptUI from "inquirer/lib/ui/prompt"
 
@@ -46,7 +47,7 @@ export const reuseCacheQuestion: Question = (answer) => {
         type: "confirm",
         message: "是否基于上次配置进行修改？",
         name: "useCache",
-        when: () => hasAppConfigCache() && answer?.cache !== true,
+        when: () => hasAnswerPagesCache() && answer?.cache !== true,
       },
     ],
     answer

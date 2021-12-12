@@ -120,6 +120,11 @@ export function readAnswerPages() {
   return []
 }
 
+// 判断是否有 answer 的缓存
+export function hasAnswerPagesCache() {
+  return fs.existsSync(answerPagesPath)
+}
+
 // 设置 app.config 的环境变量
 export function setAppConfigEnvFormCache() {
   process.env[ITARO_ENV] = readAppConfigFile()
