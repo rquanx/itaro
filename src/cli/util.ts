@@ -6,19 +6,6 @@ import { getAppEntry } from "./version1_2"
 
 type SearchItem = { name: string; value: any }
 
-export const getCommandArgs = () => {
-  const pathIndex = process.argv.findIndex((v) => v === "--path")
-  const args = process.argv.slice(2)
-  if (pathIndex > -1) {
-    const pathArgs = args.splice(pathIndex, 2)
-    if (pathArgs.length < 2) {
-      console.log(red("[itaro]：无效的path参数"))
-      process.exit(1)
-    }
-  }
-  return args
-}
-
 // 搜索列表的名称
 export function searchListByName<T extends SearchItem>(
   name: string,
@@ -40,23 +27,6 @@ export function getTaroVersion(): number | void {
     fs.readFileSync(taroPkgPath, "utf-8")
   ).version
   return Number(versionStr.split(".")[0])
-}
-
-// 判断参数
-export function checkArgs() {
-  const args = process.argv.slice(2)
-  const pathIndex = args.findIndex((v) => v === "--path")
-  if (pathIndex > -1) {
-    args.splice(pathIndex, 2)
-  }
-  if (args.length === 0) {
-    console.log(
-      red(
-        "[itaro]：请在 itaro 后面加上启动命令，具体用法请看：https://gitee.com/dream2023/itaro?_from=gitee_search#%E4%BD%BF%E7%94%A8"
-      )
-    )
-    process.exit(1)
-  }
 }
 
 // 检测是否配置

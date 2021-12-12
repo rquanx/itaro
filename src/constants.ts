@@ -1,12 +1,11 @@
 import * as path from "path"
 import * as fs from "fs"
 import { red } from "chalk"
-import { getPathArgs } from "./util"
 
+const { itaroWorkspace = "" } = global
 const getRootDir = () => {
-  const pathArgs = getPathArgs()
-  return pathArgs.length > 0
-    ? path.resolve(process.cwd(), pathArgs[1])
+  return itaroWorkspace
+    ? path.resolve(process.cwd(), itaroWorkspace)
     : process.cwd()
 }
 
@@ -16,7 +15,10 @@ const getNodeModulesDir = () => {
   while (
     index < paths.length &&
     !fs.existsSync(
-      path.resolve(rootDir, `${paths[index]}/node_modules/@tarojs/taro/package.json`)
+      path.resolve(
+        rootDir,
+        `${paths[index]}/node_modules/@tarojs/taro/package.json`
+      )
     )
   ) {
     index++
@@ -41,5 +43,5 @@ export const appConfigPath = path.resolve(sourceDir, "./app.config")
 export const cacheDir = path.resolve(nodeModulesDir, "./.cache/itaro/")
 export const appConfigCachePath = path.resolve(cacheDir, "./app.config.json")
 
-export const answerPagesPath =  path.resolve(cacheDir, "./answer-pages.json")
+export const answerPagesPath = path.resolve(cacheDir, "./answer-pages.json")
 export const ITARO_ENV = "ITARO"

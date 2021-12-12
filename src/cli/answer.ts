@@ -1,5 +1,3 @@
-const write = require("write")
-
 import * as fs from "fs"
 import { AppConfig } from "@tarojs/taro"
 import { searchListByName } from "./util"
@@ -14,6 +12,8 @@ import {
   getTabBarPages,
 } from "./appConfig"
 
+/* eslint-disable */
+const write = require("write")
 // 获取页面列表
 export function getPagesSource(searchList: PageList) {
   return (_x: any, input: string = "") => {
@@ -133,7 +133,7 @@ export function readAppConfigFile() {
 }
 
 export interface AnswersResult {
-  cache: boolean
+  cache?: boolean
   pages?: PageValue[]
   useCache?: boolean
 }

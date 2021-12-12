@@ -1,79 +1,19 @@
-import * as inquirer from "inquirer"
-import {
-  getAppConfig,
-  hasAppConfigCache,
-  getPagesWithoutTabBarPages,
-} from "./appConfig"
-import {
-  AnswersResult,
-  validatePages,
-  processAnswers,
-  getPagesSource,
-  readAnswerPages,
-} from "./answer"
-import {
-  checkArgs,
-  checkSetting,
-  getCommandArgs,
-} from "./util"
-const shelljs = require("shelljs")
+import { Command } from "commander"
 
-// 检查命令
-checkArgs()
-checkSetting()
+const program = new Command()
+program
+  .requiredOption("-s --script <script...>", "specify script")
+  .option("-c, --cache", "use cache")
+  .option("-r, --reuse", "reuse cache for select")
+  .option("-p, --path <path>", "specific workspace")
+  .option("-i, --ignore", "ignore option")
 
-// 注册插件
-inquirer.registerPrompt(
-  "checkbox-plus",
-  require("inquirer-checkbox-plus-prompt")
-)
-inquirer.registerPrompt("autocomplete", require("inquirer-autocomplete-prompt"))
+program.parse(process.argv)
+const options = program.opts()
+global.itaroWorkspace = options.path
 
-const appConfig = getAppConfig()
-const searchList = getPagesWithoutTabBarPages(appConfig)
+/* eslint-disable */
+// 必须使用require，动态加载，由于路径变量都是作为常量定义，所以在加载前需要预设好itaroWorkspace
+const actions = require("./action")
 
-const process = (answers) => {
-  processAnswers(appConfig, answers)
-  const args = getCommandArgs()
-  shelljs.exec(args.join(" "))
-}
-
-inquirer
-  .prompt<AnswersResult>([
-    {
-      type: "confirm",
-      message: "是否沿用上次配置？",
-      name: "cache",
-      when: hasAppConfigCache,
-    },
-    {
-      type: "confirm",
-      message: "是否基于上次配置进行修改？",
-      name: "useCache",
-      when: (answers) => answers.cache !== true,
-    },
-  ])
-  .then(async (answers) => {
-    if (answers.cache) {
-      process(answers)
-      return
-    }
-    inquirer
-      .prompt([
-        {
-          type: "checkbox-plus",
-          name: "pages",
-          message: "选择要编译的页面(可输入过滤):",
-          pageSize: 10,
-          highlight: true,
-          searchable: true,
-          prefix: "",
-          default: answers.useCache ? readAnswerPages() : [],
-          source: getPagesSource(searchList),
-          validate: validatePages(appConfig),
-        },
-      ])
-      .then((a) => {
-        process({ ...answers, ...a })
-      })
-  })
+actions.process(options)
