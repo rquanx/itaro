@@ -76,8 +76,6 @@ export function getAnswerAppConfig(
   originAppConfig: AppConfig,
   answerPages: PageValue[] = []
 ): AppConfig {
-  // 删除预加载信息
-  delete originAppConfig.preloadRule
 
   const tabBarPages = getTabBarPages(originAppConfig)
 
