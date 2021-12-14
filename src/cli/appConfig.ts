@@ -43,8 +43,8 @@ export interface PageItem {
 export type PageList = PageItem[]
 
 // 判断是否有 app.config.js 的缓存
-export function hasAppConfigCache() {
-  return existsSync(appConfigCachePath)
+export function hasAppConfigCache(type?: string) {
+  return existsSync(appConfigCachePath(type))
 }
 
 // 获取 appConfig 内容

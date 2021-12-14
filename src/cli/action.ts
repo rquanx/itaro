@@ -51,12 +51,12 @@ const process = (options: OptionValues) => {
   let promise = Promise.resolve(actionArgs.answer)
   if ((actionArgs.questions?.length ?? 0) > 0) {
     actionArgs.questions?.forEach(
-      (question) => (promise = promise.then(question))
+      (question) => (promise = promise.then((v) => question(v, options)))
     )
   }
   promise.then((answer) => {
     const appConfig = getAppConfig()
-    processAnswers(appConfig, answer ?? {})
+    processAnswers(appConfig, answer ?? {}, options.type)
     shelljs.exec(script)
   })
 }

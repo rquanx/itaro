@@ -14,7 +14,10 @@ import {
 } from "./answer"
 import PromptUI from "inquirer/lib/ui/prompt"
 
-export type Question = (answer?: AnswersResult) => Promise<AnswersResult> & {
+export type Question = (
+  answer?: AnswersResult,
+  extra?: Record<string, any>
+) => Promise<AnswersResult> & {
   ui: PromptUI
 }
 
@@ -29,32 +32,35 @@ inquirer.registerPrompt("autocomplete", require("inquirer-autocomplete-prompt"))
 // 检查命令
 checkSetting()
 
-export const useCacheQuestion: Question = () => {
-  return inquirer.prompt<AnswersResult>([
-    {
-      type: "confirm",
-      message: "是否沿用上次配置？",
-      name: "cache",
-      when: hasAppConfigCache,
-    },
-  ])
-}
-
-export const reuseCacheQuestion: Question = (answer) => {
+export const useCacheQuestion: Question = (answer, extra) => {
   return inquirer.prompt<AnswersResult>(
     [
       {
         type: "confirm",
-        message: "是否基于上次配置进行修改？",
-        name: "reuseCache",
-        when: () => hasAnswerPagesCache() && answer?.cache !== true,
+        message: "是否沿用上次配置？",
+        name: "cache",
+        when: () => hasAppConfigCache(extra?.type),
       },
     ],
     answer
   )
 }
 
-export const selectQuestion: Question = (answer) => {
+export const reuseCacheQuestion: Question = (answer, extra) => {
+  return inquirer.prompt<AnswersResult>(
+    [
+      {
+        type: "confirm",
+        message: "是否基于上次配置进行修改？",
+        name: "reuseCache",
+        when: () => hasAnswerPagesCache(extra?.type) && answer?.cache !== true,
+      },
+    ],
+    answer
+  )
+}
+
+export const selectQuestion: Question = (answer, extra) => {
   if (answer?.cache === true) {
     return Promise.resolve(answer) as Promise<AnswersResult> & {
       ui: PromptUI
@@ -72,7 +78,7 @@ export const selectQuestion: Question = (answer) => {
         highlight: true,
         searchable: true,
         prefix: "",
-        default: answer?.reuseCache ? readAnswerPages() : [],
+        default: answer?.reuseCache ? readAnswerPages(extra?.type) : [],
         source: getPagesSource(searchList),
         validate: validatePages(appConfig),
       },

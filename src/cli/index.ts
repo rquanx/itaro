@@ -7,6 +7,7 @@ program
   .option("-r, --reuse", "reuse cache for select")
   .option("-p, --path <path>", "specific workspace")
   .option("-i, --ignore", "ignore option")
+  .option("-t, --type <type>", "app type for write cache file")
 
 program.parse(process.argv)
 const options = program.opts()

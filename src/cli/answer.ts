@@ -104,36 +104,41 @@ export function setAppConfigEnv(appConfig: AppConfig) {
 }
 
 // 写入 app.config.json
-export function writeAppConfig(appConfig: AppConfig): void {
+export function writeAppConfig(appConfig: AppConfig, type?: string): void {
   setAppConfigEnv(appConfig)
-  write.sync(appConfigCachePath, JSON.stringify(appConfig, null, 2))
+  write.sync(appConfigCachePath(type), JSON.stringify(appConfig, null, 2))
 }
 
-export function writeAnswerPages(pages: PageValue[] | undefined) {
-  write.sync(answerPagesPath, JSON.stringify(pages ?? []))
+export function writeAnswerPages(
+  pages: PageValue[] | undefined,
+  type?: string
+) {
+  write.sync(answerPagesPath(type), JSON.stringify(pages ?? []))
 }
 
-export function readAnswerPages() {
-  if (fs.existsSync(answerPagesPath)) {
-    return JSON.parse(fs.readFileSync(answerPagesPath, "utf-8"))
+export function readAnswerPages(type?: string) {
+  const p = answerPagesPath(type)
+  if (fs.existsSync(p)) {
+    return JSON.parse(fs.readFileSync(p, "utf-8"))
   }
   return []
 }
 
 // 判断是否有 answer 的缓存
-export function hasAnswerPagesCache() {
-  return fs.existsSync(answerPagesPath)
+export function hasAnswerPagesCache(type?: string) {
+  return fs.existsSync(answerPagesPath(type))
 }
 
 // 设置 app.config 的环境变量
-export function setAppConfigEnvFormCache() {
-  process.env[ITARO_ENV] = readAppConfigFile()
+export function setAppConfigEnvFormCache(type?: string) {
+  process.env[ITARO_ENV] = readAppConfigFile(type)
 }
 
 // 读取文件
-export function readAppConfigFile() {
-  if (fs.existsSync(appConfigCachePath)) {
-    return fs.readFileSync(appConfigCachePath, "utf-8")
+export function readAppConfigFile(type?: string) {
+  const p = appConfigCachePath(type)
+  if (fs.existsSync(p)) {
+    return fs.readFileSync(p, "utf-8")
   }
 }
 
@@ -142,14 +147,18 @@ export interface AnswersResult {
   pages?: PageValue[]
   reuseCache?: boolean
 }
-export function processAnswers(appConfig: AppConfig, answers: AnswersResult) {
+export function processAnswers(
+  appConfig: AppConfig,
+  answers: AnswersResult,
+  type?: string
+) {
   // 如果使用缓存，则无需做任何处理
   if (!answers.cache) {
     // app.config 处理
     const answerAppConfig = getAnswerAppConfig(appConfig, answers.pages)
-    writeAnswerPages(answers.pages)
-    writeAppConfig(answerAppConfig)
+    writeAnswerPages(answers.pages, type)
+    writeAppConfig(answerAppConfig, type)
   } else {
-    setAppConfigEnvFormCache()
+    setAppConfigEnvFormCache(type)
   }
 }
