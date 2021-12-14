@@ -55,7 +55,6 @@ const process = (options: OptionValues) => {
     )
   }
   promise.then((answer) => {
-    console.log(answer)
     const appConfig = getAppConfig()
     processAnswers(appConfig, answer ?? {})
     shelljs.exec(script)
