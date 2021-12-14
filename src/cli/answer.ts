@@ -140,7 +140,7 @@ export function readAppConfigFile() {
 export interface AnswersResult {
   cache?: boolean
   pages?: PageValue[]
-  useCache?: boolean
+  reuseCache?: boolean
 }
 export function processAnswers(appConfig: AppConfig, answers: AnswersResult) {
   // 如果使用缓存，则无需做任何处理

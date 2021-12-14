@@ -31,7 +31,7 @@ const initActionArgs = (options: OptionValues): ActionArgs => {
     // 直接从上次缓存继续
     return {
       answer: {
-        useCache: true,
+        reuseCache: true,
       },
       questions: [selectQuestion],
     }
@@ -55,7 +55,7 @@ const process = (options: OptionValues) => {
     )
   }
   promise.then((answer) => {
-    console.log(answer);
+    console.log(answer)
     const appConfig = getAppConfig()
     processAnswers(appConfig, answer ?? {})
     shelljs.exec(script)

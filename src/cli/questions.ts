@@ -46,7 +46,7 @@ export const reuseCacheQuestion: Question = (answer) => {
       {
         type: "confirm",
         message: "是否基于上次配置进行修改？",
-        name: "useCache",
+        name: "reuseCache",
         when: () => hasAnswerPagesCache() && answer?.cache !== true,
       },
     ],
@@ -72,7 +72,7 @@ export const selectQuestion: Question = (answer) => {
         highlight: true,
         searchable: true,
         prefix: "",
-        default: answer?.useCache ? readAnswerPages() : [],
+        default: answer?.reuseCache ? readAnswerPages() : [],
         source: getPagesSource(searchList),
         validate: validatePages(appConfig),
       },
