@@ -55,6 +55,11 @@ export const reuseCacheQuestion: Question = (answer) => {
 }
 
 export const selectQuestion: Question = (answer) => {
+  if (answer?.cache === true) {
+    return Promise.resolve(answer) as Promise<AnswersResult> & {
+      ui: PromptUI
+    }
+  }
   const appConfig = getAppConfig()
   const searchList = getPagesWithoutTabBarPages(appConfig)
   return inquirer.prompt<AnswersResult>(
