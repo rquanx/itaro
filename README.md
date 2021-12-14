@@ -120,6 +120,9 @@ monorepo时使用
 itaro -s npm run dev:weapp -p ./packages/<package-name>
 ```
 
+#### 设定类型
+
+通过-t设置不同的app类型，会有独立的缓存
 
 
 #### 不使用缓存
@@ -140,6 +143,5 @@ itaro -s npm run dev:weapp -i
 
 - `subpackages` 页面，如果选择了 `root` 页面，则会自动选择全部子页面；
 - `tabBar` 中的页面会被自动选中，不会出现在选择列中；
-- `preloadRule` 字段会被删除；
 - `itaro` 会缓存用户的选择，所以当第二次启动时，会提示是否沿用之前的选择；
 - 缓存是持久化文件存储的，所以一旦改变 `app` 的配置项（比如修改了 tabbar 或者新增了页面），再次启动时，需要重新选择来更新缓存！！！
