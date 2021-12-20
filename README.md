@@ -9,13 +9,13 @@
 项目安装：
 
 ```bash
-yarn add @dream2023/itaro -D # npm install --save-dev @dream2023/itaro
+yarn add @miles/itaro -D # npm install --save-dev @miles/itaro
 ```
 
 全局安装：
 
 ```bash
-yarn global add @dream2023/itaro # npm install -g @dream2023/itaro
+yarn global add @miles/itaro # npm install -g @miles/itaro
 ```
 
 ## 使用
@@ -76,11 +76,14 @@ class App extends Component {
 **第 2 步**：修改 `app.config.js` 或者 `app.config.ts` 为：
 
 ```js
-import itaro from "@dream2023/itaro"
+import itaro from "@miles/itaro"
 
 export default itaro({
   pages: ["pages/index/index"],
   // ...
+},(config) => {
+    // 自定义额外处理
+    return config
 })
 ```
 
@@ -96,7 +99,9 @@ export default itaro({
 
 
 
-#### 直接使用上次缓存
+#### --cache
+
+直接使用上次缓存
 
 ```bash
 itaro -s npm run dev:weapp -c
@@ -104,7 +109,9 @@ itaro -s npm run dev:weapp -c
 
 
 
-#### 基于上次缓存继续选择
+#### --reuse
+
+基于上次缓存继续选择
 
 ```bash
 itaro -s npm run dev:weapp -r
@@ -112,22 +119,27 @@ itaro -s npm run dev:weapp -r
 
 
 
-#### 设定工作空间
+#### --path
 
-monorepo时使用
+设定工作空间，用于支持monorepo时使用
 
 ```bash
 itaro -s npm run dev:weapp -p ./packages/<package-name>
 ```
 
-#### 设定类型
+
+
+#### --type
+
+设定类型
 
 通过-t设置不同的app类型，会有独立的缓存
 
 
-#### 不使用缓存
 
+#### --ignore
 
+不使用缓存
 
 ```bash
 itaro -s npm run dev:weapp -i
