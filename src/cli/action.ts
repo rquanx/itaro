@@ -7,7 +7,6 @@ import {
   selectQuestion,
   reuseCacheQuestion,
 } from "./questions"
-import { checkSetting } from "./util"
 
 /* eslint-disable */
 const shelljs = require("shelljs")
@@ -15,9 +14,6 @@ interface ActionArgs {
   answer?: AnswersResult
   questions?: Question[]
 }
-
-// 检查命令
-checkSetting()
 
 const initActionArgs = (options: OptionValues): ActionArgs => {
   if (options.ignore) {
