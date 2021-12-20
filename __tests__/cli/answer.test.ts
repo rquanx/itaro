@@ -11,6 +11,9 @@ import {
   setAppConfigEnvFormCache,
   validatePages,
   writeAppConfig,
+  writeAnswerPages,
+  readAnswerPages,
+  hasAnswerPagesCache,
 } from "../../src/cli/answer"
 import { PageType, PageList, PageValue } from "../../src/cli/appConfig"
 const mock = require("mock-fs")
@@ -20,11 +23,19 @@ const cachePath = path.resolve(
   process.cwd(),
   "node_modules/.cache/itaro/app.config.json"
 )
+const answerPagesCachePath = path.resolve(
+  process.cwd(),
+  "node_modules/.cache/itaro/answer-pages.json"
+)
 const mockAppConfig = JSON.stringify({ pages: ["pages/logs"] }, null, 2)
-
+const mockAnswerPages = JSON.stringify([
+  { value: "pages/test-page", type: 0 },
+  { value: "nice-router/network-exception-page", type: 0 },
+])
 function mockCache() {
   mock({
     [cachePath]: mockAppConfig,
+    [answerPagesCachePath]: mockAnswerPages,
   })
 }
 
@@ -273,6 +284,21 @@ describe("answer", () => {
     delete process.env.ITARO
   })
 
+  test("writeAnswerPages", () => {
+    const answerPages = [
+      { value: "pages/test-page", type: 0 },
+      { value: "nice-router/network-exception-page", type: 0 },
+    ]
+    writeAnswerPages(answerPages)
+    const cachePath = path.resolve(
+      process.cwd(),
+      "node_modules/.cache/itaro/answer-pages.json"
+    )
+    expect(require(cachePath)).toEqual(answerPages)
+
+    rimraf.sync(cachePath)
+  })
+
   test("setAppConfigEnvFormCache", () => {
     mockCache()
 
@@ -288,9 +314,37 @@ describe("answer", () => {
     mock.restore()
   })
 
+  test("readAnswerPages 有文件", () => {
+    mockCache()
+    expect(readAnswerPages()).toEqual(mockAnswerPages)
+    mock.restore()
+  })
+
+  test("readAnswerPages 无文件", () => {
+    cleanCache()
+    expect(readAnswerPages()).toEqual(undefined)
+  })
+
   test("readAppConfigFile 无文件", () => {
     cleanCache()
     expect(readAppConfigFile()).toEqual(undefined)
+  })
+
+  describe("hasAnswerPagesCache", () => {
+    test("无缓存", () => {
+      expect(hasAnswerPagesCache()).toBe(false)
+    })
+
+    test("有缓存", () => {
+      const filePath = path.resolve(
+        process.cwd(),
+        "node_modules/.cache/itaro/answer-pages.json"
+      )
+      mock({
+        [filePath]: "content",
+      })
+      expect(hasAnswerPagesCache()).toBe(true)
+    })
   })
 
   describe("processAnswers", () => {
