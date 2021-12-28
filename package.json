@@ -1,5 +1,5 @@
 {
-  "name": "@miles/itaro",
+  "name": "@rquanx/itaro",
   "version": "1.0.0",
   "description": "Taro 按需编译解决方案。",
   "main": "index.js",
@@ -27,15 +27,15 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dream2023/itaro.git"
+    "url": "git+https://github.com/rquanx/itaro.git"
   },
   "keywords": [
     "Taro",
     "weapp",
     "miniapp"
   ],
-  "author": "dream2023",
-  "homepage": "https://github.com/dream2023/itaro#readme",
+  "author": "rquanx",
+  "homepage": "https://github.com/rquanx/itaro#readme",
   "devDependencies": {
     "@tarojs/taro": "^3.1.1",
     "@types/inquirer": "^7.3.1",
