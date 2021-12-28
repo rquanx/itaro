@@ -102,20 +102,20 @@ export function setAppConfigEnv(appConfig: AppConfig) {
 }
 
 // 写入 app.config.json
-export function writeAppConfig(appConfig: AppConfig, type?: string): void {
+export function writeAppConfig(appConfig: AppConfig, pad?: string): void {
   setAppConfigEnv(appConfig)
-  write.sync(appConfigCachePath(type), JSON.stringify(appConfig, null, 2))
+  write.sync(appConfigCachePath(pad), JSON.stringify(appConfig, null, 2))
 }
 
 export function writeAnswerPages(
   pages: PageValue[] | undefined,
-  type?: string
+  pad?: string
 ) {
-  write.sync(answerPagesPath(type), JSON.stringify(pages ?? []))
+  write.sync(answerPagesPath(pad), JSON.stringify(pages ?? []))
 }
 
-export function readAnswerPages(type?: string) {
-  const p = answerPagesPath(type)
+export function readAnswerPages(pad?: string) {
+  const p = answerPagesPath(pad)
   if (fs.existsSync(p)) {
     return JSON.parse(fs.readFileSync(p, "utf-8"))
   }
@@ -123,18 +123,18 @@ export function readAnswerPages(type?: string) {
 }
 
 // 判断是否有 answer 的缓存
-export function hasAnswerPagesCache(type?: string) {
-  return fs.existsSync(answerPagesPath(type))
+export function hasAnswerPagesCache(pad?: string) {
+  return fs.existsSync(answerPagesPath(pad))
 }
 
 // 设置 app.config 的环境变量
-export function setAppConfigEnvFormCache(type?: string) {
-  process.env[ITARO_ENV] = readAppConfigFile(type)
+export function setAppConfigEnvFormCache(pad?: string) {
+  process.env[ITARO_ENV] = readAppConfigFile(pad)
 }
 
 // 读取文件
-export function readAppConfigFile(type?: string) {
-  const p = appConfigCachePath(type)
+export function readAppConfigFile(pad?: string) {
+  const p = appConfigCachePath(pad)
   if (fs.existsSync(p)) {
     return fs.readFileSync(p, "utf-8")
   }
@@ -148,15 +148,15 @@ export interface AnswersResult {
 export function processAnswers(
   appConfig: AppConfig,
   answers: AnswersResult,
-  type?: string
+  pad?: string
 ) {
   // 如果使用缓存，则无需做任何处理
   if (!answers.cache) {
     // app.config 处理
     const answerAppConfig = getAnswerAppConfig(appConfig, answers.pages)
-    writeAnswerPages(answers.pages, type)
-    writeAppConfig(answerAppConfig, type)
+    writeAnswerPages(answers.pages, pad)
+    writeAppConfig(answerAppConfig, pad)
   } else {
-    setAppConfigEnvFormCache(type)
+    setAppConfigEnvFormCache(pad)
   }
 }

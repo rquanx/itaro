@@ -52,7 +52,7 @@ const process = (options: OptionValues) => {
   }
   promise.then((answer) => {
     const appConfig = getAppConfig()
-    processAnswers(appConfig, answer ?? {}, options.type)
+    processAnswers(appConfig, answer ?? {}, options.pad)
     shelljs.exec(script)
   })
 }

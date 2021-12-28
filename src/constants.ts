@@ -41,9 +41,9 @@ export const taroPackageJson = `${nodeModulesDir}/@tarojs/taro/package.json`
 
 export const appConfigPath = path.resolve(sourceDir, "./app.config")
 export const cacheDir = path.resolve(nodeModulesDir, "./.cache/itaro/")
-export const appConfigCachePath = (type?: string) =>
-  path.resolve(cacheDir, `./app.config${type ? `.${type}` : ""}.json`)
+export const appConfigCachePath = (pad?: string) =>
+  path.resolve(cacheDir, `./app.config${pad ? `.${pad}` : ""}.json`)
 
-export const answerPagesPath = (type?: string) =>
-  path.resolve(cacheDir, `./answer-pages${type ? `.${type}` : ""}.json`)
+export const answerPagesPath = (pad?: string) =>
+  path.resolve(cacheDir, `./answer-pages${pad ? `.${pad}` : ""}.json`)
 export const ITARO_ENV = "ITARO"
